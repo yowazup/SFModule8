@@ -1,6 +1,4 @@
-﻿
-using SFModule8;
-using System;
+﻿using System;
 using System.IO;
 using System.Globalization;
 using System.Net;
@@ -9,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
 
-namespace SFModule8
+namespace Task1
 {
     class ProgramTask1
     {
@@ -17,16 +15,16 @@ namespace SFModule8
         {
             string folderPath = "D:/Task1";
 
-                if (Directory.Exists(folderPath)) // Проверим, что директория существует
-                {
-                    Console.WriteLine("Папка найдена. Приступаю к удалению содержимого.");
-                    Console.WriteLine();
-                    DeleteFolderContent(folderPath);
-                }
-                else
-                {
-                    Console.WriteLine("Передан некорректный путь к папке для очистки.");
-                }
+            if (Directory.Exists(folderPath)) // Проверим, что директория существует
+            {
+                Console.WriteLine("Папка найдена. Приступаю к удалению содержимого.");
+                Console.WriteLine();
+                DeleteFolderContent(folderPath);
+            }
+            else
+            {
+                Console.WriteLine("Передан некорректный путь к папке для очистки.");
+            }
             Console.ReadKey();
         }
         static void DeleteFolderContent(string folderPath)
