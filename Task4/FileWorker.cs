@@ -46,7 +46,7 @@ namespace FinalTask
             {
                 if (dirInfo.Exists)
                 {
-                    dirInfo.Delete();
+                    dirInfo.Delete(true);
                 }
                 dirInfo.Create();
                 Console.WriteLine("Папка {0} создана.", dirInfo);
@@ -54,7 +54,7 @@ namespace FinalTask
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("Папку {0} создать не удалось: {1}.", dirInfo, ex.Message);
             }
         }
         static void CreateFile(DirectoryInfo dirInfo, string fileName, string groupName)
@@ -65,13 +65,15 @@ namespace FinalTask
                 {
                     File.Delete(fileName);
                 }
-                File.Create(fileName);
-                Console.WriteLine("Файл группы {0} создан в директории {1}.", groupName, dirInfo);
-
+                else
+                {
+                    using(FileStream fs = File.Create(fileName))
+                    Console.WriteLine("Файл группы {0} создан в директории {1}.", groupName, dirInfo);
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("Файл гурппы {0} создать не удалось: {1}.", groupName, ex.Message);
             }
         }
         public static void FileWrite(string fileName, string studentName, DateTime studentDateOfBirth)
@@ -93,7 +95,7 @@ namespace FinalTask
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("Студента {0} занести не удалось: {1}.",studentName, ex.Message);
                 }
             }
         }
