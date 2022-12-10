@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace Task1
 {
-    class ProgramTask1
+    public class ProgramTask1
     {
         static void Main(string[] args)
         {
@@ -27,7 +27,7 @@ namespace Task1
             }
             Console.ReadKey();
         }
-        static void DeleteFolderContent(string folderPath)
+        public static void DeleteFolderContent(string folderPath)
         {
             string[] folders = Directory.GetDirectories(folderPath);  // Получим все содержащиеся папки
             string[] files = Directory.GetFiles(folderPath); // Получим все содержащиеся файлы
@@ -35,27 +35,6 @@ namespace Task1
             if (folders.Length + files.Length == 0)
                 Console.WriteLine("Папка пуста. Ничего удалять не потребовалось.");
 
-            foreach (string folder in folders)  // Удаление папок со всем содержимым
-            {
-                if (DateTime.Now - Directory.GetLastAccessTime(folder) > TimeSpan.FromMinutes(30)) // Проверяем использовали ли папку посление 30 минут
-                {
-                    try
-                    {
-                        DirectoryInfo Folder = new DirectoryInfo(folder);
-                        Folder.Delete(true);
-                        Console.WriteLine("Папка {0} и ее содержимое удалено.", folder);
-                        Console.WriteLine();
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Нет прав доступа на удаление папки {0} и ее содержимого: {1}", folder, ex.Message);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Папкой {0} и ее содержимым пользовались в течение последних 30 минут. Не удаляю.", folder);
-                }
-            }
             foreach (string file in files) // Удаление файлов
             {
                 if (DateTime.Now - Directory.GetLastAccessTime(file) > TimeSpan.FromMinutes(30)) // Проверяем использовали ли файл посление 30 минут
@@ -75,6 +54,32 @@ namespace Task1
                 {
                     Console.WriteLine("Файлом {0} пользовались в течение последних 30 минут. Не удаляю.", file);
                 }
+            }
+            foreach (string folder in folders)  // Удаление содержимого всех папок
+            {
+                try
+                {
+                    DeleteFolderContent(folder);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Нет прав доступа на удаление содержимого папки {0}: {1}", folder, ex.Message);
+                }
+            }
+            foreach (string folder in folders)  // Удаление пустых папок
+            {
+                    try
+                    {
+                        DirectoryInfo Folder = new DirectoryInfo(folder);
+                        Folder.Delete();
+                        Console.WriteLine("Папка {0} и ее содержимое удалены.", folder);
+                        DeleteFolderContent(folder);
+                        Console.WriteLine();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Нет прав доступа на удаление папки {0}: {1}", folder, ex.Message);
+                    }
             }
         }
     }
